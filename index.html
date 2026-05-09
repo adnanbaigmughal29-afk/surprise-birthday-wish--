@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎂 Birthday Wish - Malaika</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Nastaliq+Urdu&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #ff6b9d;
+    --gold: #ffd700;
+    --pink: #ff85b3;
+    --deep: #7b2d8b;
+    --soft: #fff0f7;
+    --purple: #a855f7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #0a0010;
+    color: #fff;
+    overflow-x: hidden;
+  }
+
+  /* ===================== LOCK PAGE ===================== */
+  #lockPage {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(ellipse at center, #1a0030 0%, #0a0010 100%);
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .lock-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,107,157,0.3);
+    border-radius: 24px;
+    padding: 48px 40px;
+    width: 90%;
+    max-width: 440px;
+    box-shadow: 0 0 60px rgba(255,107,157,0.15), 0 0 120px rgba(168,85,247,0.1);
+    backdrop-filter: blur(20px);
+    text-align: center;
+    animation: floatCard 3s ease-in-out infinite;
+  }
+
+  @keyframes floatCard {
+    0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}
+  }
+
+  .lock-icon { font-size: 3.5rem; margin-bottom: 10px; animation: spin 4s linear infinite; display:inline-block; }
+  @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+
+  .lock-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.4rem;
+    background: linear-gradient(135deg, var(--rose), var(--gold), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+
+  .lock-sub {
+    font-size: 0.8rem; color: rgba(255,255,255,0.45);
+    margin-bottom: 28px; letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  .form-group { margin-bottom: 18px; text-align: left; }
+
+  .form-group label {
+    font-size: 0.75rem; color: var(--rose); letter-spacing: 1.5px;
+    text-transform: uppercase; display: block; margin-bottom: 8px;
+  }
+
+  .form-group input, .form-group select {
+    width: 100%; padding: 13px 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,107,157,0.25);
+    border-radius: 12px; color: #fff;
+    font-size: 0.95rem; font-family: 'Poppins', sans-serif;
+    outline: none; transition: all 0.3s;
+    appearance: none;
+  }
+
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--rose);
+    box-shadow: 0 0 20px rgba(255,107,157,0.2);
+    background: rgba(255,255,255,0.09);
+  }
+
+  .form-group select option { background: #1a0030; color: #fff; }
+
+  .dob-row { display: flex; gap: 12px; }
+  .dob-row .form-group { flex: 1; margin-bottom: 0; }
+
+  .unlock-btn {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, var(--rose), var(--purple), var(--gold));
+    background-size: 200% 200%;
+    border: none; border-radius: 14px;
+    color: #fff; font-size: 1rem; font-weight: 600;
+    cursor: pointer; margin-top: 24px;
+    letter-spacing: 1px; text-transform: uppercase;
+    transition: all 0.3s;
+    animation: gradientShift 3s ease infinite;
+    position: relative; overflow: hidden;
+  }
+
+  @keyframes gradientShift {
+    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
+  }
+
+  .unlock-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(255,107,157,0.4); }
+  .unlock-btn:active { transform: translateY(0); }
+
+  .alert-box {
+    display: none; margin-top: 18px;
+    background: rgba(255,50,50,0.1);
+    border: 1px solid rgba(255,80,80,0.4);
+    border-radius: 12px; padding: 14px;
+    font-size: 0.85rem; color: #ff8080;
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 60%{transform:translateX(8px)}
+  }
+
+  /* Stars BG */
+  .stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .star {
+    position: absolute; border-radius: 50%;
+    background: white; animation: twinkle var(--d,2s) infinite;
+  }
+  @keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:1} }
+
+  /* ===================== BIRTHDAY PAGE ===================== */
+  #birthdayPage {
+    display: none;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #1a0035 0%, #0a0010 60%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Floating petals */
+  .petal {
+    position: fixed; pointer-events: none; z-index: 1;
+    font-size: 1.2rem;
+    animation: petalFall linear infinite;
+    opacity: 0.7;
+  }
+  @keyframes petalFall {
+    0%{transform:translateY(-10vh) rotate(0deg); opacity:0.8}
+    100%{transform:translateY(110vh) rotate(720deg); opacity:0}
+  }
+
+  /* ====== HERO HEADER ====== */
+  .hero {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 60px 20px 50px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255,107,157,0.12) 0%, transparent 70%);
+  }
+
+  .from-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,215,0,0.3);
+    border-radius: 50px;
+    padding: 6px 20px;
+    font-size: 0.78rem; letter-spacing: 2px;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 20px;
+    animation: fadeSlideDown 1s ease both;
+  }
+
+  @keyframes fadeSlideDown {
+    from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)}
+  }
+
+  .happy-bday {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(3rem, 10vw, 6rem);
+    background: linear-gradient(135deg, #ff6b9d, #ffd700, #ff6b9d, #a855f7);
+    background-size: 300% 300%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: gradientShift 4s ease infinite, fadeSlideDown 1.2s ease both;
+    line-height: 1.1; margin-bottom: 10px;
+    filter: drop-shadow(0 0 30px rgba(255,107,157,0.5));
+  }
+
+  .name-hero {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 7vw, 4rem);
+    font-style: italic;
+    color: #fff;
+    animation: fadeSlideDown 1.4s ease both;
+    letter-spacing: 3px;
+    text-shadow: 0 0 40px rgba(255,107,157,0.6);
+  }
+
+  .crown { font-size: 2.5rem; animation: crownBounce 1s ease infinite; display: inline-block; }
+  @keyframes crownBounce { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-8px) rotate(5deg)} }
+
+  .from-line {
+    margin-top: 18px;
+    font-size: 1rem; color: rgba(255,255,255,0.6);
+    letter-spacing: 2px;
+    animation: fadeSlideDown 1.6s ease both;
+  }
+  .from-line span { color: var(--rose); font-weight: 600; }
+
+  .divider {
+    width: 80%; max-width: 500px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rose), var(--gold), var(--rose), transparent);
+    margin: 30px auto;
+    animation: fadeSlideDown 1.8s ease both;
+  }
+
+  /* Sparkles */
+  .sparkle {
+    position: absolute; pointer-events: none;
+    font-size: 1.5rem;
+    animation: sparklePop 2s ease-in-out infinite;
+  }
+  @keyframes sparklePop {
+    0%,100%{opacity:0.3;transform:scale(0.8) rotate(0deg)}
+    50%{opacity:1;transform:scale(1.2) rotate(20deg)}
+  }
+
+  /* ====== INTRO POETRY ====== */
+  .intro-poetry {
+    max-width: 700px; margin: 0 auto 60px;
+    text-align: center; padding: 0 24px;
+    position: relative; z-index: 10;
+    animation: fadeSlideDown 2s ease both;
+  }
+
+  .intro-poetry p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    line-height: 2;
+    color: rgba(255,255,255,0.8);
+    font-style: italic;
+  }
+
+  /* ====== IMAGE-POETRY SECTIONS ====== */
+  .section-row {
+    display: flex;
+    align-items: stretch;
+    max-width: 1100px;
+    margin: 0 auto 0;
+    position: relative; z-index: 10;
+    min-height: 420px;
+  }
+
+  .section-row.reverse { flex-direction: row-reverse; }
+
+  .section-image {
+    width: 50%;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .section-image img {
+    width: 100%; height: 100%; min-height: 420px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+    filter: brightness(0.85) saturate(1.2);
+  }
+
+  .section-image:hover img { transform: scale(1.04); }
+
+  .section-image::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, transparent 60%, #0a0010 100%);
+  }
+  .section-row.reverse .section-image::after {
+    background: linear-gradient(to left, transparent 60%, #0a0010 100%);
+  }
+
+  .section-poetry {
+    width: 50%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 50px 40px;
+    background: rgba(255,255,255,0.02);
+    border-top: 1px solid rgba(255,107,157,0.1);
+    border-bottom: 1px solid rgba(255,107,157,0.1);
+  }
+
+  .poetry-inner { max-width: 360px; }
+
+  .poetry-lang {
+    font-size: 0.65rem; letter-spacing: 3px;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.7;
+  }
+
+  .poetry-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: rgba(255,255,255,0.88);
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+
+  .poetry-text.urdu {
+    font-family: 'Noto Nastaliq Urdu', serif;
+    direction: rtl; text-align: right;
+    font-size: 1.15rem;
+    line-height: 2.4;
+  }
+
+  .poetry-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, var(--rose), var(--gold));
+    margin: 12px 0;
+  }
+
+  .poetry-heart { color: var(--rose); font-size: 1.2rem; }
+
+  /* Separator between rows */
+  .row-sep {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,107,157,0.2), rgba(255,215,0,0.2), transparent);
+    position: relative; z-index: 10;
+  }
+
+  /* ====== CAKE SECTION ====== */
+  .cake-section {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 80px 20px 100px;
+    background: radial-gradient(ellipse at center, rgba(255,107,157,0.08) 0%, transparent 70%);
+  }
+
+  .cake-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3rem;
+    color: var(--gold);
+    margin-bottom: 40px;
+    text-shadow: 0 0 30px rgba(255,215,0,0.4);
+  }
+
+  /* SVG Cake */
+  .cake-wrap {
+    display: inline-block;
+    position: relative;
+    animation: cakeFloat 3s ease-in-out infinite;
+  }
+  @keyframes cakeFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+  /* Candle flames */
+  .flame {
+    animation: flicker 0.3s ease-in-out infinite alternate;
+    transform-origin: bottom center;
+  }
+  @keyframes flicker {
+    0%{transform:scaleX(1) scaleY(1) rotate(-2deg); opacity:1}
+    100%{transform:scaleX(0.85) scaleY(1.1) rotate(2deg); opacity:0.85}
+  }
+
+  /* Fireworks canvas */
+  #fireworks {
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
+  }
+
+  /* ====== FINAL MESSAGE ====== */
+  .final-msg {
+    text-align: center; padding: 40px 20px 80px;
+    position: relative; z-index: 10;
+  }
+  .final-msg p {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: var(--rose);
+    text-shadow: 0 0 20px rgba(255,107,157,0.5);
+  }
+
+  /* Responsive */
+  @media(max-width:700px) {
+    .section-row, .section-row.reverse { flex-direction: column; }
+    .section-image, .section-poetry { width: 100%; }
+    .section-image::after, .section-row.reverse .section-image::after {
+      background: linear-gradient(to bottom, transparent 60%, #0a0010 100%);
+    }
+    .section-image img { min-height: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- STARS -->
+<div class="stars" id="stars"></div>
+
+<!-- CANVAS for fireworks -->
+<canvas id="fireworks"></canvas>
+
+<!-- ======================== LOCK PAGE ======================== -->
+<div id="lockPage">
+  <div class="lock-card">
+    <div class="lock-icon">🔐</div>
+    <div class="lock-title">Secret Birthday Page</div>
+    <div class="lock-sub">Enter the birthday girl's date of birth to unlock</div>
+
+    <div class="dob-row">
+      <div class="form-group">
+        <label>Day</label>
+        <input type="number" id="dobDay" placeholder="DD" min="1" max="31">
+      </div>
+      <div class="form-group">
+        <label>Month</label>
+        <input type="number" id="dobMonth" placeholder="MM" min="1" max="12">
+      </div>
+      <div class="form-group">
+        <label>Year</label>
+        <input type="number" id="dobYear" placeholder="YYYY" min="1900" max="2025">
+      </div>
+    </div>
+
+    <button class="unlock-btn" onclick="checkDOB()">🎁 Unlock Birthday Surprise</button>
+
+    <div class="alert-box" id="alertBox">
+      ❌ Incorrect date of birth! Please enter the correct birthday to unlock this special page. 💔
+    </div>
+  </div>
+</div>
+
+<!-- ======================== BIRTHDAY PAGE ======================== -->
+<div id="birthdayPage">
+
+  <!-- Floating petals will be injected by JS -->
+
+  <!-- HERO -->
+  <div class="hero">
+    <span class="sparkle" style="top:10%;left:5%;animation-delay:0s">✨</span>
+    <span class="sparkle" style="top:15%;right:8%;animation-delay:0.5s">⭐</span>
+    <span class="sparkle" style="top:40%;left:3%;animation-delay:1s">💫</span>
+    <span class="sparkle" style="top:30%;right:4%;animation-delay:1.5s">✨</span>
+    <span class="sparkle" style="top:60%;left:7%;animation-delay:0.8s">🌟</span>
+
+    <div class="from-tag">💌 A Special Wish From Aneeba</div>
+    <div class="crown">👑</div>
+    <div class="happy-bday">Happy Birthday</div>
+    <div class="name-hero">Malaika 🌸</div>
+    <div class="from-line">With all the love in the world — <span>From Your Sister Aneeba 💕</span></div>
+    <div class="divider"></div>
+
+    <div class="intro-poetry">
+      <p>
+        On this beautiful day you came into the world,<br>
+        You brought with you sunshine, laughter, and light.<br>
+        My heart has never been the same since,<br>
+        Because sisters like you make everything right. 🌹
+      </p>
+    </div>
+  </div>
+
+  <!-- ========== ROW 1: Image Right, Poetry Left ========== -->
+  <div class="section-row reverse">
+    <div class="section-image">
+      <!-- Placeholder for user image 1 — replace src with your image -->
+      <img src="image/pic1.png" alt="">
+    </div>
+    <div class="section-poetry">
+      <div class="poetry-inner">
+        <div class="poetry-lang">English Poetry ✦</div>
+        <div class="poetry-text">
+          You are the rose that blooms in spring,<br>
+          The song the angels love to sing.<br>
+          You're more than just my sister dear,<br>
+          You're my best friend throughout the year. 🌹
+        </div>
+        <div class="poetry-divider"></div>
+        <div class="poetry-heart">♥ Aneeba</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-sep"></div>
+
+  <!-- ========== ROW 2: Image Left, Poetry Right ========== -->
+  <div class="section-row">
+    <div class="section-image">
+     <img src="image/pic2.png" alt="">
+    </div>
+    <div class="section-poetry">
+      <div class="poetry-inner">
+        <div class="poetry-lang">اردو شاعری ✦</div>
+        <div class="poetry-text urdu">
+          تو ہے میری دنیا کا سب سے قیمتی تحفہ<br>
+          تیری ہنسی میں بسی ہے میری خوشی<br>
+          جنم دن مبارک ہو میری پیاری بہنا<br>
+          تجھ سے روشن ہے میری زندگی 🌸
+        </div>
+        <div class="poetry-divider"></div>
+        <div class="poetry-heart">♥ آپی عنیبہ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-sep"></div>
+
+<div>
+</div>
+
+
+
+  <!-- ========== ROW 3: Image Right, Poetry Left ========== -->
+  <div class="section-row reverse">
+    <div class="section-image">
+     <img src="image/pic3.png" alt="">
+    </div>
+    <div class="section-poetry">
+      <div class="poetry-inner">
+        <div class="poetry-lang">English Poetry ✦</div>
+        <div class="poetry-text">
+          A sister is a forever friend,<br>
+          A treasure that will never end.<br>
+          Malaika, you're my heart's delight,<br>
+          My guiding star on every night. 💫
+        </div>
+        <div class="poetry-divider"></div>
+        <div class="poetry-heart">♥ Aneeba</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-sep"></div>
+
+  <!-- ========== ROW 4: Image Left, Poetry Right ========== -->
+  <div class="section-row">
+    <div class="section-image">
+      <img src="image/pic4.png" alt="">
+    </div>
+    <div class="section-poetry">
+      <div class="poetry-inner">
+        <div class="poetry-lang">اردو شاعری ✦</div>
+        <div class="poetry-text urdu">
+          ہزار خوشیاں لائے یہ دن تیرے لیے<br>
+          ہر آرزو پوری ہو آج تیری<br>
+          میری دعا ہے تو ہمیشہ مسکرائے<br>
+          میری ملائکہ، میری پیاری بہن ہے تو 💕
+        </div>
+        <div class="poetry-divider"></div>
+        <div class="poetry-heart">♥ آپی عنیبہ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CAKE SECTION ========== -->
+  <div class="cake-section">
+    <div class="cake-title">Make a Wish, Malaika! 🎂</div>
+
+    <div class="cake-wrap">
+      <svg width="320" height="340" viewBox="0 0 320 340" xmlns="http://www.w3.org/2000/svg">
+        <!-- Plate -->
+        <ellipse cx="160" cy="305" rx="130" ry="16" fill="rgba(255,107,157,0.15)" />
+
+        <!-- Bottom tier -->
+        <rect x="50" y="230" width="220" height="70" rx="12" fill="url(#cakeGrad1)" />
+        <ellipse cx="160" cy="230" rx="110" ry="14" fill="#ff85b3" />
+        <ellipse cx="160" cy="300" rx="110" ry="14" fill="#d4578a" />
+
+        <!-- Frosting bottom -->
+        <path d="M50,240 Q70,220 90,240 Q110,220 130,240 Q150,220 170,240 Q190,220 210,240 Q230,220 250,240 L270,240 L270,230 L50,230 Z" fill="white" opacity="0.9"/>
+
+        <!-- Middle tier -->
+        <rect x="80" y="168" width="160" height="65" rx="10" fill="url(#cakeGrad2)" />
+        <ellipse cx="160" cy="168" rx="80" ry="11" fill="#c77dff" />
+        <ellipse cx="160" cy="233" rx="80" ry="11" fill="#9d4edd" />
+
+        <!-- Frosting middle -->
+        <path d="M80,178 Q97,160 114,178 Q131,160 148,178 Q165,160 182,178 Q199,160 216,178 Q233,160 240,178 L240,168 L80,168 Z" fill="white" opacity="0.9"/>
+
+        <!-- Top tier -->
+        <rect x="108" y="116" width="104" height="55" rx="10" fill="url(#cakeGrad3)" />
+        <ellipse cx="160" cy="116" rx="52" ry="9" fill="#ffd700" />
+        <ellipse cx="160" cy="171" rx="52" ry="9" fill="#e6b800" />
+
+        <!-- Frosting top -->
+        <path d="M108,125 Q122,108 136,125 Q150,108 164,125 Q178,108 192,125 L212,125 L212,116 L108,116 Z" fill="white" opacity="0.9"/>
+
+        <!-- Decorations bottom tier -->
+        <circle cx="100" cy="265" r="6" fill="#ffd700" />
+        <circle cx="130" cy="265" r="6" fill="#ff6b9d" />
+        <circle cx="160" cy="265" r="6" fill="#ffd700" />
+        <circle cx="190" cy="265" r="6" fill="#ff6b9d" />
+        <circle cx="220" cy="265" r="6" fill="#ffd700" />
+
+        <!-- Candles -->
+        <!-- Candle 1 -->
+        <rect x="128" y="86" width="12" height="32" rx="3" fill="#ff6b9d" />
+        <rect x="128" y="86" width="12" height="8" rx="2" fill="#ff3366" opacity="0.5"/>
+        <!-- Flame 1 -->
+        <g class="flame">
+          <ellipse cx="134" cy="81" rx="5" ry="8" fill="#ffd700" />
+          <ellipse cx="134" cy="82" rx="3" ry="5" fill="#ff8c00" />
+          <ellipse cx="134" cy="83" rx="2" ry="3" fill="white" />
+        </g>
+
+        <!-- Candle 2 -->
+        <rect x="154" y="82" width="12" height="36" rx="3" fill="#a855f7" />
+        <rect x="154" y="82" width="12" height="8" rx="2" fill="#7c3aed" opacity="0.5"/>
+        <!-- Flame 2 -->
+        <g class="flame" style="animation-delay:0.1s">
+          <ellipse cx="160" cy="77" rx="5" ry="8" fill="#ffd700" />
+          <ellipse cx="160" cy="78" rx="3" ry="5" fill="#ff8c00" />
+          <ellipse cx="160" cy="79" rx="2" ry="3" fill="white" />
+        </g>
+
+        <!-- Candle 3 -->
+        <rect x="180" y="86" width="12" height="32" rx="3" fill="#ff6b9d" />
+        <rect x="180" y="86" width="12" height="8" rx="2" fill="#ff3366" opacity="0.5"/>
+        <!-- Flame 3 -->
+        <g class="flame" style="animation-delay:0.2s">
+          <ellipse cx="186" cy="81" rx="5" ry="8" fill="#ffd700" />
+          <ellipse cx="186" cy="82" rx="3" ry="5" fill="#ff8c00" />
+          <ellipse cx="186" cy="83" rx="2" ry="3" fill="white" />
+        </g>
+
+        <!-- Hearts decoration -->
+        <text x="88" y="215" font-size="16" fill="#fff" opacity="0.6">♥</text>
+        <text x="220" y="215" font-size="16" fill="#fff" opacity="0.6">♥</text>
+        <text x="118" y="158" font-size="14" fill="#fff" opacity="0.6">★</text>
+        <text x="192" y="158" font-size="14" fill="#fff" opacity="0.6">★</text>
+        <text x="148" y="152" font-size="12" fill="#ffd700" opacity="0.8">✦</text>
+
+        <!-- "21" on top tier -->
+        <text x="160" y="152" text-anchor="middle" font-family="'Playfair Display', serif" font-size="22" fill="#fff" font-style="italic">21</text>
+
+        <defs>
+          <linearGradient id="cakeGrad1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ff85b3"/>
+            <stop offset="100%" stop-color="#c9506e"/>
+          </linearGradient>
+          <linearGradient id="cakeGrad2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c77dff"/>
+            <stop offset="100%" stop-color="#7c3aed"/>
+          </linearGradient>
+          <linearGradient id="cakeGrad3" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffd700"/>
+            <stop offset="100%" stop-color="#e6a800"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div style="margin-top:30px; font-family:'Playfair Display',serif; font-style:italic; color:rgba(255,255,255,0.7); font-size:1rem;">
+      Close your eyes, make a wish...<br>
+      <span style="color:var(--rose)">May every dream of yours come true! 🌟</span>
+    </div>
+  </div>
+
+  <!-- FINAL MSG -->
+  <div class="final-msg">
+    <p>Always your sister, always your friend — Aneeba 💕</p>
+  </div>
+
+</div><!-- end birthdayPage -->
+
+<script>
+  // ---- Stars ----
+  const starsContainer = document.getElementById('stars');
+  for (let i = 0; i < 150; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 3 + 1;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${1.5+Math.random()*3}s;
+      animation-delay:${Math.random()*3}s;
+      opacity:${0.2+Math.random()*0.8};
+    `;
+    starsContainer.appendChild(s);
+  }
+
+  // ---- DOB Check ----
+  function checkDOB() {
+    const day = parseInt(document.getElementById('dobDay').value);
+    const month = parseInt(document.getElementById('dobMonth').value);
+    const year = parseInt(document.getElementById('dobYear').value);
+    const alert = document.getElementById('alertBox');
+
+    if (day === 11 && month === 5 && year === 2005) {
+      document.getElementById('lockPage').style.display = 'none';
+      document.getElementById('birthdayPage').style.display = 'block';
+      alert.style.display = 'none';
+      startBirthday();
+    } else {
+      alert.style.display = 'block';
+      alert.style.animation = 'none';
+      void alert.offsetWidth;
+      alert.style.animation = 'shake 0.4s ease';
+    }
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') checkDOB();
+  });
+
+  // ---- Birthday Start ----
+  function startBirthday() {
+    spawnPetals();
+    startFireworks();
+    window.scrollTo(0,0);
+  }
+
+  // ---- Petals ----
+  function spawnPetals() {
+    const emojis = ['🌸','🌺','🌹','💐','🌷','✨','💫','⭐','🎀','💕','🌼'];
+    for (let i = 0; i < 25; i++) {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.className = 'petal';
+        p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        p.style.cssText = `
+          left:${Math.random()*100}%;
+          animation-duration:${5+Math.random()*8}s;
+          animation-delay:${Math.random()*4}s;
+          font-size:${0.8+Math.random()*1.2}rem;
+        `;
+        document.getElementById('birthdayPage').appendChild(p);
+      }, i * 300);
+    }
+    // Respawn
+    setInterval(() => {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      p.style.cssText = `
+        left:${Math.random()*100}%;
+        animation-duration:${6+Math.random()*6}s;
+        animation-delay:0s;
+        font-size:${0.8+Math.random()}rem;
+      `;
+      document.getElementById('birthdayPage').appendChild(p);
+      setTimeout(() => p.remove(), 14000);
+    }, 600);
+  }
+
+  // ---- Fireworks ----
+  const canvas = document.getElementById('fireworks');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class Particle {
+    constructor(x, y, color) {
+      this.x = x; this.y = y;
+      this.color = color;
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 6 + 2;
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
+      this.alpha = 1;
+      this.size = Math.random() * 4 + 2;
+      this.gravity = 0.12;
+      this.decay = 0.015 + Math.random() * 0.01;
+    }
+    update() {
+      this.vx *= 0.98;
+      this.vy += this.gravity;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.alpha -= this.decay;
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  const fwColors = ['#ff6b9d','#ffd700','#a855f7','#ff85b3','#fff','#c77dff','#ffa0cc'];
+
+  function explode(x, y) {
+    const color = fwColors[Math.floor(Math.random()*fwColors.length)];
+    for (let i = 0; i < 60; i++) {
+      particles.push(new Particle(x, y, color));
+    }
+  }
+
+  let fwActive = false;
+  function startFireworks() {
+    fwActive = true;
+    // Initial burst
+    for (let i = 0; i < 6; i++) {
+      setTimeout(() => {
+        explode(
+          100 + Math.random() * (canvas.width - 200),
+          80 + Math.random() * (canvas.height * 0.5)
+        );
+      }, i * 350);
+    }
+    // Ongoing
+    setInterval(() => {
+      if (fwActive) {
+        explode(
+          100 + Math.random() * (canvas.width - 200),
+          60 + Math.random() * (canvas.height * 0.45)
+        );
+      }
+    }, 1800);
+
+    animateFW();
+  }
+
+  function animateFW() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.alpha > 0);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animateFW);
+  }
+</script>
+</body>
+</html>
